@@ -1,13 +1,30 @@
-const toggle = document.getElementById("theme-toggle");
-toggle.onclick = () => document.body.classList.toggle("dark");
+document.addEventListener('DOMContentLoaded', () => {
+    const modal = document.getElementById('book-modal');
+    const modalBody = document.getElementById('modal-body');
+    const closeBtn = document.getElementById('close-modal');
+    const bookCards = document.querySelectorAll('.book-card');
 
-function openModal(el) {
-  document.getElementById("modal").style.display = "block";
-  document.getElementById("modal-img").src = el.src;
-  document.getElementById("modal-title").innerText = el.dataset.title;
-  document.getElementById("modal-text").innerText = el.dataset.review;
-}
+    bookCards.forEach(card => {
+        card.addEventListener('click', () => {
+            const title = card.getAttribute('data-title');
+            const desc = card.getAttribute('data-desc');
+            
+            modalBody.innerHTML = `
+                <h2 class="text-xl font-bold uppercase mb-4">${title}</h2>
+                <p class="text-sm leading-relaxed">${desc}</p>
+            `;
+            modal.classList.remove('hidden');
+        });
+    });
 
-function closeModal() {
-  document.getElementById("modal").style.display = "none";
-}
+    closeBtn.addEventListener('click', () => {
+        modal.classList.add('hidden');
+    });
+
+    // Close modal on background click
+    window.addEventListener('click', (event) => {
+        if (event.target === modal) {
+            modal.classList.add('hidden');
+        }
+    });
+});
