@@ -1,4 +1,13 @@
-.column-line { border-bottom: 2px solid #2d5a27; padding-bottom: 8px; margin-bottom: 24px; width: 100%; }
+html {
+    scroll-behavior: smooth;
+}
+
+.column-line { 
+    border-bottom: 2px solid #2d5a27; 
+    padding-bottom: 8px; 
+    margin-bottom: 24px; 
+    width: 100%; 
+}
 
 .nav-tab { 
     cursor: pointer; 
@@ -19,4 +28,9 @@
 
 .hidden { 
     display: none !important; 
+}
+
+/* Added to give links some space so they don't hit the top of the browser exactly */
+.scroll-mt-10 {
+    scroll-margin-top: 2.5rem;
 }
