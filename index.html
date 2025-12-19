@@ -8,41 +8,17 @@
     <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="Style.css">
     <style>
-        body { 
-            background-color: #f8fcf8; 
-            color: #2d5a27; 
-            font-family: 'IBM Plex Mono', monospace; 
-        }
-        /* Separates the green lines in the About/Writing section */
-        .column-line { 
-            border-bottom: 2px solid #2d5a27; 
-            padding-bottom: 8px; 
-            margin-bottom: 24px; 
-            width: 100%; 
-        }
-        /* Navigation tab styling */
-        .nav-tab { 
-            cursor: pointer; 
-            padding-bottom: 8px; 
-            border-bottom: 4px solid transparent; 
-            transition: all 0.2s; 
-            opacity: 0.4; 
-        }
-        .nav-tab-active { 
-            opacity: 1; 
-            border-bottom: 4px solid #2d5a27; 
-        }
-        .hidden { display: none; }
+        body { background-color: #f8fcf8; color: #2d5a27; font-family: 'IBM Plex Mono', monospace; }
+        .column-line { border-bottom: 2px solid #2d5a27; padding-bottom: 8px; margin-bottom: 24px; width: 100%; }
         
-        /* Clean search bar styling */
-        #shelf-search {
-            border-radius: 0;
-            -webkit-appearance: none;
-        }
-        #shelf-search::placeholder { 
-            color: #2d5a27; 
-            opacity: 0.4; 
-        }
+        /* Tab Styles */
+        .nav-tab { cursor: pointer; padding-bottom: 8px; border-bottom: 4px solid transparent; transition: all 0.2s; opacity: 0.4; text-transform: uppercase; font-weight: bold; font-size: 0.75rem; tracking: 0.1em; }
+        .nav-tab-active { opacity: 1; border-bottom: 4px solid #2d5a27; }
+        .shelf-content { display: none; }
+        .shelf-content.active { display: grid; }
+        #essays-grid.active { display: block; } /* Essays use a list layout, not a grid */
+
+        #shelf-search::placeholder { color: #2d5a27; opacity: 0.4; }
     </style>
 </head>
 <body class="p-6 md:p-12 max-w-6xl mx-auto">
@@ -68,21 +44,13 @@
             <div class="flex flex-col">
                 <h2 class="column-line font-bold uppercase">About Me</h2>
                 <div class="text-sm space-y-6">
-                    <div>
-                        <p class="opacity-50 mb-2">//NOW//</p>
-                        <p>- thinking deeply about social and storytelling at <span class="underline">Base</span></p>
-                        <p>- building <span class="underline">Noun</span>, a coffee and wine bar in LA</p>
-                    </div>
+                    <p>- thinking deeply about social and storytelling at <span class="underline">Base</span></p>
+                    <p>- building <span class="underline">Noun</span>, a coffee and wine bar in LA</p>
                 </div>
             </div>
-
             <div class="flex flex-col">
                 <h2 class="column-line font-bold uppercase">Writing</h2>
                 <div class="space-y-4 text-sm">
-                    <div class="border-b border-[#2d5a27] border-dotted pb-2">
-                        <p class="underline font-bold">essays on being a dad</p>
-                        <p class="text-[10px] opacity-50 uppercase">Paragraph · 2024</p>
-                    </div>
                     <div class="border-b border-[#2d5a27] border-dotted pb-2">
                         <p class="underline font-bold">the internet is a portal</p>
                         <p class="text-[10px] opacity-50 uppercase">Mirror · 2023</p>
@@ -93,52 +61,38 @@
     </section>
 
     <section id="shelf" class="mt-20">
-        <div class="flex gap-8 md:gap-12 border-b-2 border-[#2d5a27] mb-8 uppercase font-bold text-xs tracking-widest overflow-x-auto whitespace-nowrap">
-            <button class="nav-tab nav-tab-active" data-shelf="books">Bookshelf</button>
-            <button class="nav-tab" data-shelf="movies">Movie Shelf</button>
-            <button class="nav-tab" data-shelf="travel">Travel Log</button>
-            <button class="nav-tab" data-shelf="essays">Essays</button>
+        <div class="flex gap-8 md:gap-12 border-b-2 border-[#2d5a27] mb-8 overflow-x-auto whitespace-nowrap">
+            <button class="nav-tab nav-tab-active" onclick="switchTab('books')">Bookshelf</button>
+            <button class="nav-tab" onclick="switchTab('movies')">Movie Shelf</button>
+            <button class="nav-tab" onclick="switchTab('travel')">Travel Log</button>
+            <button class="nav-tab" onclick="switchTab('essays')">Essays</button>
         </div>
 
         <div class="mb-10 space-y-6">
-            <input type="text" id="shelf-search" placeholder="SEARCH..." 
-                   class="w-full bg-transparent border-b border-[#2d5a27] py-2 outline-none uppercase font-bold text-sm tracking-widest">
-            
-            <div class="flex flex-wrap items-center justify-between gap-4">
-                <div class="flex items-center gap-3 text-[10px] font-bold uppercase">
-                    <span class="opacity-50">Filter:</span>
+            <input type="text" id="shelf-search" placeholder="SEARCH..." class="w-full bg-transparent border-b border-[#2d5a27] py-2 outline-none uppercase font-bold text-sm tracking-widest">
+            <div class="flex justify-between items-center">
+                <div class="flex gap-3 text-[10px] font-bold uppercase">
                     <button class="px-3 py-1 bg-[#2d5a27] text-white">All</button>
-                    <button class="px-3 py-1 border border-[#2d5a27] hover:bg-[#2d5a27] hover:text-white transition-colors">★ Core Texts</button>
-                    <button class="px-3 py-1 border border-[#2d5a27] hover:bg-[#2d5a27] hover:text-white transition-colors">♥ Liked</button>
+                    <button class="px-3 py-1 border border-[#2d5a27]">★ Core</button>
                 </div>
                 <div id="item-count" class="text-[10px] opacity-50 font-bold uppercase">131 BOOKS</div>
             </div>
         </div>
 
-        <div id="books-grid" class="shelf-content grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-6">
-            <div class="item-card aspect-[2/3] border border-[#e0eadd] shadow-sm overflow-hidden hover:-translate-y-1 transition-transform cursor-pointer">
-                <img src="Books/TheCosmicSerpent.jpg" alt="The Cosmic Serpent" class="w-full h-full object-cover">
-            </div>
-            </div>
-
-        <div id="movies-grid" class="shelf-content hidden grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-6">
-            <div class="item-card aspect-[2/3] border border-[#e0eadd] shadow-sm overflow-hidden bg-black flex items-center justify-center text-white text-[10px]">
-                MOVIE POSTER
-            </div>
-            </div>
-
-        <div id="travel-grid" class="shelf-content hidden grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div class="border border-[#2d5a27] p-6 text-xs uppercase font-bold">
-                <p class="opacity-50">2024</p>
-                <p class="text-lg">Miami, Florida</p>
-            </div>
+        <div id="books-grid" class="shelf-content active grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-6">
+            <div class="border border-[#e0eadd] aspect-[2/3]"><img src="Books/TheCosmicSerpent.jpg" class="w-full h-full object-cover"></div>
         </div>
 
-        <div id="essays-grid" class="shelf-content hidden space-y-6">
-            <div class="border-b border-[#2d5a27] border-dotted pb-4">
-                <p class="underline font-bold uppercase">The Decentralized Web</p>
-                <p class="text-[10px] opacity-50 uppercase">2023</p>
-            </div>
+        <div id="movies-grid" class="shelf-content grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-6">
+            <div class="aspect-[2/3] bg-black text-white p-4 text-[10px]">MOVIE CONTENT HERE</div>
+        </div>
+
+        <div id="travel-grid" class="shelf-content grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div class="border border-[#2d5a27] p-4 font-bold uppercase text-xs">Miami · 2024</div>
+        </div>
+
+        <div id="essays-grid" class="shelf-content space-y-4">
+            <div class="border-b border-dotted border-[#2d5a27] pb-2 text-sm uppercase font-bold">My First Essay</div>
         </div>
     </section>
 
