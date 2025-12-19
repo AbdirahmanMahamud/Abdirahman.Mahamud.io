@@ -6,7 +6,7 @@
     <title>Drew Coffman - Portfolio</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="Style.css">
+    <link rel="stylesheet" href="style.css">
 </head>
 <body class="p-6 md:p-12 max-w-6xl mx-auto">
 
@@ -49,8 +49,8 @@
     </section>
 
     <section id="shelf" class="mt-20 scroll-mt-24">
-        <div class="tab-container mb-8">
-            <div class="flex gap-8 md:gap-12 overflow-x-auto whitespace-nowrap px-2">
+        <div class="tabs-wrapper mb-8">
+            <div class="flex gap-8 md:gap-12 overflow-x-auto whitespace-nowrap">
                 <button class="nav-tab nav-tab-active" data-shelf="books">BOOKSHELF</button>
                 <button class="nav-tab" data-shelf="movies">MOVIE SHELF</button>
                 <button class="nav-tab" data-shelf="travel">TRAVEL LOG</button>
@@ -63,26 +63,28 @@
             <div class="flex justify-between items-center text-[10px] font-bold uppercase">
                 <div class="flex gap-3">
                     <button class="px-3 py-1 bg-[#2d5a27] text-white">All</button>
-                    <button class="px-3 py-1 border border-[#2d5a27]">* Core</button>
+                    <button class="px-3 py-1 border border-[#2d5a27] hover:bg-[#2d5a27] hover:text-white transition-colors">* Core</button>
                 </div>
-                <div id="item-count" class="opacity-50">131 BOOKS</div>
+                <div id="item-count" class="opacity-50 font-bold">131 BOOKS</div>
             </div>
         </div>
 
         <div id="books-grid" class="shelf-content grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-6">
-            <div class="border border-[#2d5a27]/20 aspect-[2/3] overflow-hidden">
+            <div class="border border-[#2d5a27]/20 aspect-[2/3] overflow-hidden bg-white">
                 <img src="Books/TheCosmicSerpent.jpg" alt="The Cosmic Serpent" class="w-full h-full object-cover">
             </div>
-        </div>
+            </div>
 
         <div id="movies-grid" class="shelf-content hidden grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-6">
-            <div class="aspect-[2/3] bg-black text-white p-4 flex items-center justify-center text-center uppercase font-bold text-[10px]">
-                Movie Content
+            <div class="aspect-[2/3] bg-[#2d5a27] text-[#f8fcf8] p-4 flex items-center justify-center text-center uppercase font-bold text-[10px]">
+                MOVIE CONTENT HERE
             </div>
         </div>
 
         <div id="travel-grid" class="shelf-content hidden grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div class="border border-[#2d5a27] p-6 text-sm font-bold uppercase">Miami · 2024</div>
+            <div class="border border-[#2d5a27] p-6 text-sm font-bold uppercase">
+                <span class="opacity-40">2024</span><br>MIAMI, FLORIDA
+            </div>
         </div>
 
         <div id="essays-grid" class="shelf-content hidden space-y-8">
@@ -93,6 +95,6 @@
         </div>
     </section>
 
-    <script src="Script.js"></script>
+    <script src="script.js"></script>
 </body>
 </html>
