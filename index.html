@@ -11,14 +11,14 @@
         body { background-color: #f8fcf8; color: #2d5a27; font-family: 'IBM Plex Mono', monospace; }
         .column-line { border-bottom: 2px solid #2d5a27; padding-bottom: 8px; margin-bottom: 24px; width: 100%; }
         
-        /* Tab Navigation Logic */
+        /* Tab Navigation Fix */
         .nav-tab { cursor: pointer; padding-bottom: 8px; border-bottom: 4px solid transparent; transition: all 0.2s; opacity: 0.4; text-transform: uppercase; font-weight: bold; font-size: 0.75rem; tracking: 0.1em; }
         .nav-tab-active { opacity: 1; border-bottom: 4px solid #2d5a27; }
         
-        /* Hidden by default, shown when active */
-        .shelf-content { display: none; }
-        .shelf-content.active { display: grid; }
-        #essays-grid.active { display: block; } 
+        /* This prevents the stacking issue */
+        .shelf-content { display: none !important; }
+        .shelf-content.active { display: grid !important; }
+        #essays-grid.active { display: block !important; } 
 
         #shelf-search::placeholder { color: #2d5a27; opacity: 0.4; }
     </style>
@@ -28,9 +28,9 @@
     <header class="flex flex-col gap-4 mb-12 relative">
         <div class="flex justify-between items-start">
             <span class="font-bold uppercase text-sm tracking-widest">DREW COFFMAN</span>
-            <div class="w-8 h-8 border border-[#2d5a27] flex items-center justify-center font-bold">✳︎</div>
+            <div class="w-8 h-8 border border-[#2d5a27] flex items-center justify-center font-bold text-xs">✳︎</div>
         </div>
-        <nav class="flex gap-8 uppercase text-sm font-bold tracking-widest">
+        <nav class="flex gap-8 uppercase text-xs font-bold tracking-widest">
             <a href="#" class="hover:underline">ABOUT</a>
             <a href="#" class="hover:underline">WRITING</a>
             <a href="#shelf" class="hover:underline">BOOKSHELF</a>
@@ -47,20 +47,16 @@
                 <h2 class="column-line font-bold uppercase">About Me</h2>
                 <div class="text-sm space-y-4">
                     <p class="opacity-50">//NOW//</p>
-                    <p>- thinking deeply about social and storytelling at <span class="underline text-green-700">Base</span></p>
-                    <p>- building <span class="underline text-green-700">Noun</span>, a coffee and wine bar in LA</p>
+                    <p>- thinking deeply about social and storytelling at <span class="underline">Base</span></p>
+                    <p>- building <span class="underline">Noun</span>, a coffee and wine bar in LA</p>
                 </div>
             </div>
             <div>
                 <h2 class="column-line font-bold uppercase">Writing</h2>
                 <div class="space-y-4 text-sm">
                     <div class="border-b border-[#2d5a27] border-dotted pb-2">
-                        <p class="underline font-bold">essays on being a dad</p>
+                        <p class="underline font-bold uppercase">essays on being a dad</p>
                         <p class="text-[10px] opacity-50 uppercase">Paragraph · 2024</p>
-                    </div>
-                    <div class="border-b border-[#2d5a27] border-dotted pb-2">
-                        <p class="underline font-bold">the internet is a portal</p>
-                        <p class="text-[10px] opacity-50 uppercase">Mirror · 2023</p>
                     </div>
                 </div>
             </div>
@@ -76,40 +72,41 @@
         </div>
 
         <div class="mb-10 space-y-6">
-            <input type="text" id="shelf-search" placeholder="SEARCH..." class="w-full bg-transparent border-b border-[#2d5a27] py-2 outline-none uppercase font-bold text-sm tracking-widest">
-            <div class="flex justify-between items-center">
-                <div class="flex gap-3 text-[10px] font-bold uppercase">
+            <input type="text" id="shelf-search" placeholder="SEARCH..." class="w-full bg-transparent border-b border-[#2d5a27] py-2 outline-none uppercase font-bold text-xs tracking-widest">
+            <div class="flex justify-between items-center text-[10px] font-bold uppercase">
+                <div class="flex gap-3">
                     <button class="px-3 py-1 bg-[#2d5a27] text-white">All</button>
                     <button class="px-3 py-1 border border-[#2d5a27]">★ Core</button>
                 </div>
-                <div id="item-count" class="text-[10px] opacity-50 font-bold uppercase">131 BOOKS</div>
+                <div id="item-count" class="opacity-50">131 BOOKS</div>
             </div>
         </div>
 
-        <div class="min-h-[400px]">
+        <div class="min-h-[500px]">
             <div id="books-grid" class="shelf-content active grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-6">
-                <div class="border border-[#e0eadd] aspect-[2/3] overflow-hidden">
+                <div class="border border-[#2d5a27]/20 aspect-[2/3] overflow-hidden hover:border-[#2d5a27] transition-colors">
                     <img src="Books/TheCosmicSerpent.jpg" alt="The Cosmic Serpent" class="w-full h-full object-cover">
                 </div>
                 </div>
 
             <div id="movies-grid" class="shelf-content grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-6">
-                <div class="aspect-[2/3] bg-black text-white p-4 text-[10px] flex items-center justify-center border border-[#2d5a27]">
-                    MOVIE CONTENT HERE
+                <div class="aspect-[2/3] bg-[#2d5a27] text-[#f8fcf8] p-4 text-[10px] flex items-center justify-center text-center uppercase font-bold">
+                    [ Movie Poster ]
                 </div>
             </div>
 
             <div id="travel-grid" class="shelf-content grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div class="border border-[#2d5a27] p-6 font-bold uppercase text-xs">
-                    <p class="opacity-40">2024</p>
-                    <p class="text-base">Miami, Florida</p>
+                <div class="border border-[#2d5a27] p-6">
+                    <p class="text-[10px] opacity-40 font-bold uppercase mb-1">2024</p>
+                    <p class="text-sm font-bold uppercase underline">Miami, Florida</p>
                 </div>
             </div>
 
-            <div id="essays-grid" class="shelf-content space-y-6">
-                <div class="border-b border-dotted border-[#2d5a27] pb-4">
-                    <p class="underline font-bold uppercase text-lg">1,000 True Fans</p>
-                    <p class="text-[10px] opacity-50 uppercase">Kevin Kelly · The Technium</p>
+            <div id="essays-grid" class="shelf-content space-y-8">
+                <div class="border-b border-dotted border-[#2d5a27] pb-6">
+                    <p class="text-sm font-bold uppercase underline">1,000 True Fans</p>
+                    <p class="text-[10px] opacity-50 uppercase mt-1">Kevin Kelly · The Technium</p>
+                    <p class="text-xs mt-3 leading-relaxed opacity-80">The essay that launched a thousand creator economies.</p>
                 </div>
             </div>
         </div>
@@ -117,28 +114,19 @@
 
     <script>
         function switchTab(shelfId) {
-            // Remove active class from all tabs
-            document.querySelectorAll('.nav-tab').forEach(tab => {
-                tab.classList.remove('nav-tab-active');
-            });
+            // 1. Reset all tabs to inactive
+            document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('nav-tab-active'));
             
-            // Hide all grids
-            document.querySelectorAll('.shelf-content').forEach(grid => {
-                grid.classList.remove('active');
-            });
+            // 2. Hide all grids
+            document.querySelectorAll('.shelf-content').forEach(g => g.classList.remove('active'));
 
-            // Activate chosen tab and grid
+            // 3. Activate the chosen one
             document.getElementById('tab-' + shelfId).classList.add('nav-tab-active');
             document.getElementById(shelfId + '-grid').classList.add('active');
 
-            // Update Item Count Label
-            const counts = {
-                'books': '131 BOOKS',
-                'movies': '42 MOVIES',
-                'travel': '12 LOCATIONS',
-                'essays': '6 ESSAYS'
-            };
-            document.getElementById('item-count').innerText = counts[shelfId];
+            // 4. Update the label count
+            const labels = { 'books': '131 BOOKS', 'movies': '42 MOVIES', 'travel': '12 LOGS', 'essays': '6 ESSAYS' };
+            document.getElementById('item-count').innerText = labels[shelfId];
         }
     </script>
 </body>
