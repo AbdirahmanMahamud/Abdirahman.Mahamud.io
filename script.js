@@ -67,4 +67,39 @@ document.addEventListener('DOMContentLoaded', () => {
     document.addEventListener('keydown', (e) => {
         if (e.key === 'Escape') closeModal();
     });
+
+    // 3. Filtering Logic (All vs Core)
+    const filterAllBtn = document.getElementById('filter-all');
+    const filterCoreBtn = document.getElementById('filter-core');
+
+    function applyFilter(filterType) {
+        const allItems = document.querySelectorAll('.shelf-item');
+        
+        allItems.forEach(item => {
+            // Check for the core symbol within the item
+            const hasCoreSymbol = item.textContent.includes('✳︎');
+
+            if (filterType === 'core') {
+                item.style.display = hasCoreSymbol ? 'block' : 'none';
+            } else {
+                item.style.display = 'block';
+            }
+        });
+
+        // Update button styles for active state
+        if (filterType === 'core') {
+            filterCoreBtn.classList.add('bg-[#2d5a27]', 'text-white');
+            filterCoreBtn.classList.remove('border');
+            filterAllBtn.classList.remove('bg-[#2d5a27]', 'text-white');
+            filterAllBtn.classList.add('border', 'border-[#2d5a27]');
+        } else {
+            filterAllBtn.classList.add('bg-[#2d5a27]', 'text-white');
+            filterAllBtn.classList.remove('border');
+            filterCoreBtn.classList.remove('bg-[#2d5a27]', 'text-white');
+            filterCoreBtn.classList.add('border', 'border-[#2d5a27]');
+        }
+    }
+
+    filterAllBtn.addEventListener('click', () => applyFilter('all'));
+    filterCoreBtn.addEventListener('click', () => applyFilter('core'));
 });
