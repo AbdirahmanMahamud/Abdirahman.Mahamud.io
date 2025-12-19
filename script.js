@@ -21,25 +21,42 @@ document.addEventListener('DOMContentLoaded', () => {
                 'essays': '6 ESSAYS'
             };
             itemCount.innerText = labels[target] || "";
+            
+            // Clear search when switching tabs
+            document.getElementById('shelf-search').value = "";
+            applySearch(""); 
         });
     });
 
-    // 2. Search Logic
+    // 2. Search Logic (The Fix)
     const searchInput = document.getElementById('shelf-search');
-    searchInput.addEventListener('input', () => {
-        const query = searchInput.value.toLowerCase();
-        const activeTab = document.querySelector('.nav-tab-active').getAttribute('data-shelf');
-        const activeGrid = document.getElementById(`${activeTab}-grid`);
-        const items = activeGrid.querySelectorAll('.shelf-item');
+
+    function applySearch(query) {
+        const searchTerm = query.toLowerCase();
+        // Look at all items across all grids
+        const items = document.querySelectorAll('.shelf-item');
 
         items.forEach(item => {
+            // Get text from data attributes (Title and Description)
             const title = (item.getAttribute('data-title') || "").toLowerCase();
             const desc = (item.getAttribute('data-description') || "").toLowerCase();
-            item.style.display = (title.includes(query) || desc.includes(query)) ? 'block' : 'none';
-        });
-    });
 
-    // 3. Modal Logic
+            if (title.includes(searchTerm) || desc.includes(searchTerm)) {
+                item.style.display = ""; // Show item
+            } else {
+                item.style.display = "none"; // Hide item
+            }
+        });
+    }
+
+    // Listen for every keystroke
+    if (searchInput) {
+        searchInput.addEventListener('input', (e) => {
+            applySearch(e.target.value);
+        });
+    }
+
+    // 3. Modal (Pop-up) Logic
     const modal = document.getElementById('details-modal');
     const modalImg = document.getElementById('modal-img');
     const modalImgContainer = document.getElementById('modal-img-container');
@@ -63,6 +80,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             modalTitle.innerText = title || "Untitled";
             modalDesc.innerText = desc || "No description available.";
+            
             modal.classList.remove('hidden');
             document.body.style.overflow = 'hidden'; 
         }
@@ -73,7 +91,14 @@ document.addEventListener('DOMContentLoaded', () => {
         document.body.style.overflow = 'auto';
     };
 
-    closeBtn.addEventListener('click', closeModal);
-    modal.addEventListener('click', (e) => { if (e.target === modal) closeModal(); });
-    document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeModal(); });
+    if (closeBtn) closeBtn.addEventListener('click', closeModal);
+    if (modal) {
+        modal.addEventListener('click', (e) => {
+            if (e.target === modal) closeModal();
+        });
+    }
+    
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') closeModal();
+    });
 });
