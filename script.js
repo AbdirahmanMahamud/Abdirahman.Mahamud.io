@@ -21,6 +21,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 'essays': '6 ESSAYS'
             };
             itemCount.innerText = labels[target] || "";
+            
+            // Reset filters when switching tabs so all items in that category show up
+            applyFilter('all'); 
         });
     });
 
@@ -68,7 +71,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (e.key === 'Escape') closeModal();
     });
 
-    // 3. Filtering Logic (All vs Core)
+    // 3. Updated Filtering Logic (Fixed Core Selection)
     const filterAllBtn = document.getElementById('filter-all');
     const filterCoreBtn = document.getElementById('filter-core');
 
@@ -76,17 +79,22 @@ document.addEventListener('DOMContentLoaded', () => {
         const allItems = document.querySelectorAll('.shelf-item');
         
         allItems.forEach(item => {
-            // Check for the core symbol within the item
-            const hasCoreSymbol = item.textContent.includes('✳︎');
+            // FIX: Check for the specific DIV that holds the symbol
+            const coreIndicator = item.querySelector('.absolute.top-2.right-2');
+            const isCore = coreIndicator !== null;
 
             if (filterType === 'core') {
-                item.style.display = hasCoreSymbol ? 'block' : 'none';
+                if (isCore) {
+                    item.style.display = 'block';
+                } else {
+                    item.style.display = 'none';
+                }
             } else {
                 item.style.display = 'block';
             }
         });
 
-        // Update button styles for active state
+        // Update button UI states
         if (filterType === 'core') {
             filterCoreBtn.classList.add('bg-[#2d5a27]', 'text-white');
             filterCoreBtn.classList.remove('border');
@@ -100,6 +108,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    filterAllBtn.addEventListener('click', () => applyFilter('all'));
-    filterCoreBtn.addEventListener('click', () => applyFilter('core'));
+    if(filterAllBtn) filterAllBtn.addEventListener('click', () => applyFilter('all'));
+    if(filterCoreBtn) filterCoreBtn.addEventListener('click', () => applyFilter('core'));
 });
