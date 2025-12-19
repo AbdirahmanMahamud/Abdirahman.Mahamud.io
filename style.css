@@ -22,8 +22,24 @@ body {
 .tabs-wrapper {
     border-bottom: 2px solid #2d5a27; /* The thin full-width line */
     width: 100%;
-    overflow: visible; /* Removes the scroll bar next to the tabs */
+    overflow: hidden !important; /* Removes vertical scrollbar from parent */
     display: flex;
+}
+
+/* Target the inner flex container specifically to hide scrollbars */
+.tabs-wrapper > div {
+    display: flex;
+    overflow-x: auto;
+    overflow-y: hidden;
+    -ms-overflow-style: none;  /* IE and Edge */
+    scrollbar-width: none;  /* Firefox */
+}
+
+/* Hide scrollbar for Chrome, Safari, and Opera */
+.tabs-wrapper > div::-webkit-scrollbar {
+    display: none;
+    width: 0 !important;
+    height: 0 !important;
 }
 
 .nav-tab { 
@@ -56,26 +72,11 @@ body {
     scroll-margin-top: 6rem;
 }
 
-/* Book Cover Hover Effect (Optional but polished) */
+/* Book Cover Hover Effect */
 .shelf-content img {
     transition: opacity 0.2s ease;
 }
 
 .shelf-content img:hover {
     opacity: 0.8;
-}
-/* Hide scrollbar for Chrome, Safari and Opera */
-.tabs-wrapper div::-webkit-scrollbar {
-    display: none;
-}
-
-/* Hide scrollbar for IE, Edge and Firefox */
-.tabs-wrapper div {
-    -ms-overflow-style: none;  /* IE and Edge */
-    scrollbar-width: none;  /* Firefox */
-}
-
-/* Ensure the flex container doesn't force a vertical scroll */
-.tabs-wrapper div {
-    overflow-y: hidden;
 }
