@@ -1,9 +1,50 @@
 document.addEventListener('DOMContentLoaded', () => {
-    // 1. Tab Switching Logic
+    // 1. Element Selectors
     const tabs = document.querySelectorAll('.nav-tab');
     const grids = document.querySelectorAll('.shelf-content');
     const itemCount = document.getElementById('item-count');
+    const searchInput = document.getElementById('shelf-search');
+    const filterAllBtn = document.getElementById('filter-all');
+    const filterCoreBtn = document.getElementById('filter-core');
 
+    let currentMode = 'all'; // Track if we are in 'all' or 'core' mode
+
+    // 2. The Unified Filter Engine (Search + Core)
+    function runFilters() {
+        const query = searchInput.value.toLowerCase();
+        const activeTab = document.querySelector('.nav-tab-active').getAttribute('data-shelf');
+        const activeGrid = document.getElementById(`${activeTab}-grid`);
+        
+        // Target items in the active grid OR the writing section if applicable
+        const items = activeGrid ? activeGrid.querySelectorAll('.shelf-item') : document.querySelectorAll('#writing-section .shelf-item');
+
+        let visibleCount = 0;
+
+        items.forEach(item => {
+            const title = (item.getAttribute('data-title') || "").toLowerCase();
+            const desc = (item.getAttribute('data-description') || "").toLowerCase();
+            
+            // Check for core symbol div
+            const isCore = item.querySelector('.absolute.top-2.right-2') !== null;
+
+            const matchesSearch = title.includes(query) || desc.includes(query);
+            const matchesCoreFilter = (currentMode === 'all') || (currentMode === 'core' && isCore);
+
+            if (matchesSearch && matchesCoreFilter) {
+                item.style.display = 'block';
+                visibleCount++;
+            } else {
+                item.style.display = 'none';
+            }
+        });
+
+        // Update the count display
+        if (itemCount) {
+            itemCount.innerText = `${visibleCount} ${activeTab.toUpperCase()}`;
+        }
+    }
+
+    // 3. Tab Switching Logic
     tabs.forEach(tab => {
         tab.addEventListener('click', () => {
             tabs.forEach(t => t.classList.remove('nav-tab-active'));
@@ -14,49 +55,35 @@ document.addEventListener('DOMContentLoaded', () => {
             const targetGrid = document.getElementById(`${target}-grid`);
             if (targetGrid) targetGrid.classList.remove('hidden');
 
-            const labels = {
-                'books': '131 BOOKS',
-                'movies': '42 MOVIES',
-                'travel': '12 LOCATIONS',
-                'essays': '6 ESSAYS'
-            };
-            itemCount.innerText = labels[target] || "";
-            
-            // Clear search when switching tabs
-            document.getElementById('shelf-search').value = "";
-            applySearch(""); 
+            // Reset search on tab change
+            searchInput.value = "";
+            runFilters();
         });
     });
 
-    // 2. Search Logic (The Fix)
-    const searchInput = document.getElementById('shelf-search');
+    // 4. Search Input Listener
+    searchInput.addEventListener('input', runFilters);
 
-    function applySearch(query) {
-        const searchTerm = query.toLowerCase();
-        // Look at all items across all grids
-        const items = document.querySelectorAll('.shelf-item');
+    // 5. Core Filter Button Logic
+    filterAllBtn.addEventListener('click', () => {
+        currentMode = 'all';
+        filterAllBtn.classList.add('bg-[#2d5a27]', 'text-white');
+        filterAllBtn.classList.remove('border');
+        filterCoreBtn.classList.remove('bg-[#2d5a27]', 'text-white');
+        filterCoreBtn.classList.add('border', 'border-[#2d5a27]');
+        runFilters();
+    });
 
-        items.forEach(item => {
-            // Get text from data attributes (Title and Description)
-            const title = (item.getAttribute('data-title') || "").toLowerCase();
-            const desc = (item.getAttribute('data-description') || "").toLowerCase();
+    filterCoreBtn.addEventListener('click', () => {
+        currentMode = 'core';
+        filterCoreBtn.classList.add('bg-[#2d5a27]', 'text-white');
+        filterCoreBtn.classList.remove('border');
+        filterAllBtn.classList.remove('bg-[#2d5a27]', 'text-white');
+        filterAllBtn.classList.add('border', 'border-[#2d5a27]');
+        runFilters();
+    });
 
-            if (title.includes(searchTerm) || desc.includes(searchTerm)) {
-                item.style.display = ""; // Show item
-            } else {
-                item.style.display = "none"; // Hide item
-            }
-        });
-    }
-
-    // Listen for every keystroke
-    if (searchInput) {
-        searchInput.addEventListener('input', (e) => {
-            applySearch(e.target.value);
-        });
-    }
-
-    // 3. Modal (Pop-up) Logic
+    // 6. Modal (Pop-up) Logic
     const modal = document.getElementById('details-modal');
     const modalImg = document.getElementById('modal-img');
     const modalImgContainer = document.getElementById('modal-img-container');
@@ -80,7 +107,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
             modalTitle.innerText = title || "Untitled";
             modalDesc.innerText = desc || "No description available.";
-            
             modal.classList.remove('hidden');
             document.body.style.overflow = 'hidden'; 
         }
@@ -91,14 +117,10 @@ document.addEventListener('DOMContentLoaded', () => {
         document.body.style.overflow = 'auto';
     };
 
-    if (closeBtn) closeBtn.addEventListener('click', closeModal);
-    if (modal) {
-        modal.addEventListener('click', (e) => {
-            if (e.target === modal) closeModal();
-        });
-    }
+    closeBtn.addEventListener('click', closeModal);
+    modal.addEventListener('click', (e) => { if (e.target === modal) closeModal(); });
+    document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeModal(); });
     
-    document.addEventListener('keydown', (e) => {
-        if (e.key === 'Escape') closeModal();
-    });
+    // Initial run to set count
+    runFilters();
 });
