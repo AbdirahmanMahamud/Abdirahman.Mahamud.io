@@ -7,7 +7,7 @@ body {
     background-color: #f8fcf8;
     color: #2d5a27;
     font-family: 'IBM Plex Mono', monospace;
-    overflow-x: hidden; /* Prevents accidental horizontal shifting */
+    overflow-x: hidden;
 }
 
 /* Typography & Layout Elements */
@@ -18,17 +18,18 @@ body {
     width: 100%; 
 }
 
-/* Tab Navigation Styling */
+/* Updated Tab Wrapper: No permanent line, no scrollbar */
 .tabs-wrapper {
-    border-bottom: 2px solid #2d5a27; /* The thin full-width line */
     width: 100%;
-    overflow: hidden !important; /* Removes vertical scrollbar from parent */
+    overflow: hidden !important; 
     display: flex;
+    margin-bottom: 32px;
 }
 
-/* Target the inner flex container specifically to hide scrollbars */
+/* Targets the inner flex container to hide scrollbars while allowing swipe */
 .tabs-wrapper > div {
     display: flex;
+    gap: 2rem; /* Matches the spacing in Pic 2 */
     overflow-x: auto;
     overflow-y: hidden;
     -ms-overflow-style: none;  /* IE and Edge */
@@ -44,22 +45,22 @@ body {
 
 .nav-tab { 
     cursor: pointer; 
-    padding-bottom: 12px; /* Space between text and the thick underline */
-    border-bottom: 6px solid transparent; /* Thick but invisible by default */
+    padding-bottom: 8px; 
+    /* No border by default */
+    border-bottom: 6px solid transparent; 
     transition: all 0.2s ease; 
     color: #2d5a27;
-    opacity: 0.3; /* Faded when inactive */
+    opacity: 0.3; 
     text-transform: uppercase; 
     font-weight: bold; 
     font-size: 0.75rem; 
     letter-spacing: 0.1em;
-    margin-bottom: -2px; /* Aligns the thick underline with the wrapper line */
 }
 
-/* Active Tab State */
+/* Only the active tab gets the thick underline from Pic 2 */
 .nav-tab-active { 
     opacity: 1; 
-    border-bottom: 6px solid #2d5a27; /* The thick dark green bar */
+    border-bottom: 6px solid #2d5a27; 
 }
 
 /* Utility Classes */
@@ -67,12 +68,12 @@ body {
     display: none !important; 
 }
 
-/* Ensures sections don't hide behind the header when jumping to them */
+/* Section Jump Offset */
 .scroll-mt-24 {
     scroll-margin-top: 6rem;
 }
 
-/* Book Cover Hover Effect */
+/* Image Hover Effect */
 .shelf-content img {
     transition: opacity 0.2s ease;
 }
